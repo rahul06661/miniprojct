@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Signup
+
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>Signup Form </h2>
+    <form action="{{ url_for('signup') }}" method="post">
+
+      <div class="form-group">
+        <label for="email">Email:</label>
+        <input type="email" class="form-control" id="email" placeholder="Enter email" name="Email">
+      </div>
+
+      <div class="form-group">
+        <label for="Name">Name:</label>
+        <input type="text" class="form-control" id="name" placeholder="Enter name" name="Name">
+      </div>
+
+      <div class="form-group">
+        <label for="age">Age:</label>
+        <input type="number" class="form-control" id="age" placeholder="Enter age" name="Age">
+      </div>
+
+      <div class="form-group">
+        <label for="gender">Gender:</label>
+        <input type="number" class="form-control" id="Gender" placeholder="Enter Gender" name="Gender">
+      </div>
+
+      <div class="form-group">
+        <label for="phone">Phone:</label>
+        <input type="text" class="form-control" id="phone" placeholder="Enter phone Number" name="Phone">
+      </div>
+
+      
+
+      <div class="form-group">
+        <label for="Blood Group">Blood Group:</label>
+        <input type="text" class="form-control" id="Blood" placeholder="Enter Blood Group" name="Group">
+      </div>
+
+      <div class="form-group">
+        <label for="District">District:</label>
+        <input type="text" class="form-control" id="District" placeholder="Enter District" name="District">
+      </div>
+
+      <div class="form-group">
+        <label for="Panchayath">Panchayath:</label>
+        <input type="text" class="form-control" id="Panchayath" placeholder="Enter Panchayath" name="Panchayath">
+      </div>
+
+      <div class="form-group">
+        <label for="Ward">Ward:</label>
+        <input type="number" class="form-control" id="Ward" placeholder="Enter ward" name="Ward">
+      </div>
+
+      <div class="form-group">
+        <label for="hno">House Number:</label>
+        <input type="number" class="form-control" id="hno" placeholder="Enter House Number" name="House Number">
+      </div>
+
+
+
+
+      <div class="form-group">
+        <label for="pwd">Password:</label>
+        <input type="password" class="form-control" id="pwd" placeholder="Enter password" name="Pwd">
+      </div>
+
+      <div class="form-group">
+        <label for="pwd">Retype Password:</label>
+        <input type="password" class="form-control" id="pwd" placeholder="Retype password" name="Rpwd">
+      </div>
+
+
+
+      <button type="submit" class="btn btn-default">Signup</button>
+    </form>
+  </div>
+   
+{% endblock %}
