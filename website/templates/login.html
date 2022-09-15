@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Login
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <h2>SignIn Form </h2>
+    <form action="{{ url_for('auth.signin') }}" method="post">
+
+      <div class="form-group">
+        <label for="Username">Username:</label>
+        <input type="text" class="form-control" id="Username" placeholder="Username" name="email">
+      </div>
+
+      <div class="form-group">
+        <label for="pwd">Password:</label>
+        <input type="password" class="form-control" id="pwd" placeholder="Enter password" name="pwd">
+      </div>
+
+      <button type="submit" class="btn btn-default">Login</button>
+    </form>
+  </div>
+
+
+{% endblock %}
+   
