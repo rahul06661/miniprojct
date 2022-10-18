@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Complaints
+{% endblock %}
+
+{% block nav %}
+<li class="nav-item"><a class="nav-link" href="{{ url_for('views.complaint_reg') }}">Register Complaint</a></li>&nbsp; &nbsp;
+<li class="nav-item"><a class="nav-link" href=>Family Registeration</a></li>&nbsp; &nbsp;
+
+{%endblock%}
+
+{% block content %}
+
+
+{% for key, value in data.items() %}
+<h1>{{key}}</h1>
+<h2>{{value}}</h2>
+{% endfor %}
+
+
+
+{% endblock %}

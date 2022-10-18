@@ -1,5 +1,0 @@
-from werkzeug.security import generate_password_hash
-
-print(generate_password_hash('rahul'))
-
-#sha256$ZyoMPInL1G2toUhm$cb29f452e335f87e3a03f18f9217ef238f712cf3b6dbaa5229e13bcd22d6d56e

@@ -4,7 +4,21 @@
 admin 
 {% endblock %}
 
+{% block nav %}
+
+{% if user.email=='admin@gmail.com' %}
+<li class="nav-item"><a class="nav-link" href="{{ url_for('auth.mem_signup') }}">Member_Reg</a></li>&nbsp; &nbsp;
+{% endif %}
+
+
+{%endblock%}
+
 {% block content %}
 
-<li class="nav-item"><a class="nav-link" href="{{ url_for('auth.mem_signup') }}">Member_Reg</a></li>&nbsp; &nbsp;
+<div class="nav-item">
+
+   
+    <h1>{{ user}}</h1>
+
+</div>
 {% endblock %}

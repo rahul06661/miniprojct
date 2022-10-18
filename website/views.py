@@ -1,16 +1,35 @@
+from crypt import methods
 from flask import Blueprint, render_template, request, flash, jsonify
 from flask_login import login_required, current_user
-from .models import User,Member,Notification,Comp,Family
+from .models import User,Member,Notification,Comp,Family,Admin
 from . import db
 import json
-
+import datetime
 views = Blueprint('views', __name__)
+
+
+
 
 
 @views.route('',methods=['GET','POST'])
 def home():
-    print(current_user)
     return render_template("home.html",user=current_user)
+    
+"""
+@views.route('/member_home',methods=['GET','POST'])
+@login_required
+def comp_views():   
+    return render_template("member_home.html",user=current_user)
+"""
+@views.route('/user_home',methods=['GET','POST'])
+@login_required
+def user_home():
+    return render_template('user_home.html',user=current_user)
+
+@views.route('/member_home',methods=['GET','POST'])
+@login_required
+def member_home():
+    return render_template("member_home.html", user=current_user)
 
 @views.route('/comp_reg', methods=['GET', 'POST'])    
 @login_required
@@ -20,44 +39,54 @@ def complaint_reg():
         Complaint_desc = request.form.get('Complaint_desc')
         user = User.query.filter_by(id=current_user.id).first()   
         user_id=current_user.id
+        remark=""
         status='active'
-        new_comp=Notification(member_id=user.member_id,name=c_name,desc=Complaint_desc,status=status)
+        print(c_name)
+        print("__"*10)
+        print(Complaint_desc)
+        new_comp=Comp(member_id=user.member_id,user_id=current_user.id,name=c_name,desc=Complaint_desc,\
+        remark=remark,status=status,created_on=datetime.datetime.today(),\
+            update_on=datetime.datetime.today())
         db.session.add(new_comp)
         db.session.commit()
+        return render_template("complaints.html",user=current_user)
+    else:
+        return render_template("complaints.html",user=current_user)
 
 
-
-
-
-
-
-
-"""
-@views.route('/', methods=['GET', 'POST'])
+@views.route('/compview',methods=['GET','POST'])
 @login_required
-def home():
-    if request.method == 'POST':
-        note = request.form.get('note')
+def compview():
+    print("____444__"*10)
+    print(current_user)
+    com=Comp()
+    complaints = Comp.query.filter(com.member_id==current_user.member_id).all()
+    print(com.member_idz)
+    print("Comp.member_id",Comp.member_id)
+    print("current_user.member_id",current_user.member_id)
+    complaints_dicts={}
 
-        if len(note) < 1:
-            flash('Note is too short!', category='error')
-        else:
-            new_note = Note(data=note, user_id=current_user.id)
-            db.session.add(new_note)
-            db.session.commit()
-            flash('Note added!', category='success')
+    for comp in complaints:
+        complaints_dicts[comp.id]={'name':comp.name,
+                                    'desc':comp.desc,
+                                    'status':comp.status,
+                                    'remark':comp.remark,
+                                    'created_on':comp.created_on,
+                                    'updated_on':comp.update_on}
+        print(complaints_dicts)
+    return render_template("comp_view.html",user=current_user,data=complaints_dicts)
 
-    return render_template("home.html", user=current_user)"""
-
-
-@views.route('/delete-note', methods=['POST'])
-def delete_note():
-    note = json.loads(request.data)
-    noteId = note['noteId']
-    note = Note.query.get(noteId)
-    if note:
-        if note.user_id == current_user.id:
-            db.session.delete(note)
-            db.session.commit()
-
-    return jsonify({})
+@views.route('/notification',methods=['GET','POST'])
+@login_required
+def notification():
+    if request.method=='POST':
+        name=request.form.get('name')
+        desc=request.form.get('descrption')
+        status='active'
+        new_notification=Notification(name=name,desc=desc,member_id=current_user.id,status=status,created_on=datetime.datetime.today(),\
+            update_on=datetime.datetime.today())
+        db.session.add(new_notification)
+        db.session.commit()
+        return render_template("post_notification.html",user=current_user)
+    else:
+        return render_template("post_notification.html",user=current_user)

@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}
+postnotification
+{% endblock %}
+
+{% block content %}
+<div>
+<form action= "{{url_for('views.notification')}}" method="post">
+
+<div>
+    <label for="Name"></label> Name <input type="text" name="name" id="name">
+</div>
+
+<div>
+    <label for="Description"> </label> Description <textarea type="text" name="desc" id="desc1"></textarea>
+</div>
+
+<div>
+    <input type="submit" class="button-cls" value="post">
+</div>
+
+</div>
+</form>
+
+
+{% endblock %}
+   

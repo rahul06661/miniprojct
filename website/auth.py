@@ -1,10 +1,9 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for
-from .models import User,Member
+from .models import User,Member,Comp,Notification,Admin
 from werkzeug.security import generate_password_hash, check_password_hash
 from . import db
 from flask_login import login_user, login_required, logout_user, current_user
-
-
+from . import views
 auth = Blueprint('auth', __name__)
 
 
@@ -20,26 +19,52 @@ def signin():
     if request.method == 'POST':
         email = request.form.get('email')
         password = request.form.get('pwd')
-
-        if email=='admin@gmail.com' and password=='admin':
-            return render_template("admin.html", user=current_user)
-        else:
-            user = User.query.filter_by(email=email).first()
-            if user:
-                if check_password_hash(user.password, password):
-                    flash('Logged in successfully!', category='success')
-                    login_user(user, remember=True)
-                    return redirect(url_for('views.home'))
-                else:
-                    flash('Incorrect password, try again.', category='error')
+        admn=Admin.query.filter_by(email=email).first()
+        #admn=Admin.query.all()
+        print(admn)
+           
+        user = User.query.filter_by(email=email).first()
+        member_log=Member.query.filter_by(email=email).first()
+        if admn:
+            if check_password_hash(admn.password,password):
+                login_user(admn,remember=True)
+                print("################",current_user)
+                return render_template("admin.html", user=current_user)
             else:
-                flash('Email does not exist.', category='error')
-
+                flash('Incorrect password, try again.', category='error')
+        print(member_log)
+        if member_log:
+            if check_password_hash(member_log.password,password):
+                flash('logged in sucessfully',category='success')
+                login_user(member_log,remember=True)
+                complaints=Comp.query.filter_by(member_id=member_log.id)
+                print("__"*100)
+                print(current_user.name)
+                return render_template("member_home.html", user=current_user)
+                #return redirect(url_for('views.member_home'))             
+            else:
+                flash('Incorrect password, try again.', category='error')
+        else:
+            flash('',category='error')   
+        if user:
+            if check_password_hash(user.password, password):
+                flash('Logged in successfully!', category='success')
+                login_user(user, remember=True)
+                notification_dict={}
+                notifications=Notification.query.filter(Notification.member_id==User.member_id).all()
+                for notifi in notifications:
+                    notification_dict[notifi.name]=notifi.desc               
+                return render_template("user_home.html",user=current_user,data=notification_dict)
+            else:
+                flash('Incorrect password, try again.', category='error')
+        else:
+            flash(' ', category='error')
     return render_template("login.html", user=current_user)
 
 
 
 @auth.route('/sign-up_member', methods=['GET', 'POST'])
+@login_required
 def mem_signup():
     if request.method == 'POST':
         email = request.form.get('Email')
@@ -62,7 +87,7 @@ def mem_signup():
             db.session.add(new_user)
             db.session.commit()
             flash('Member Account created!', category='success')
-            return redirect(url_for('views.home'))
+            return render_template("admin.html", user=current_user)
     return render_template("member_register.html", user=current_user)
 
 
@@ -90,10 +115,7 @@ def signup():
         elif len(password1) < 7:
             flash('Password must be at least 7 characters.', category='error')
         else:
-            
             member = Member.query.filter_by(ward=ward).first()
-            print(member)
-
             new_user = User(member_id=member.id,email=email,name=Name,age=Age, gender=gender,phone=Phone,blood_group=blood_group,\
             ward=ward,Houseno=House_Number,password=generate_password_hash(
                 password1, method='sha256'))
@@ -101,6 +123,7 @@ def signup():
             db.session.commit()
             login_user(new_user, remember=True)
             flash('Account created!', category='success')
-            return redirect(url_for('views.home'))
+            logout_user()
+            return redirect(url_for('auth.signin'))  
     return render_template("sign_up.html", user=current_user)
 
