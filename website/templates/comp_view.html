@@ -34,7 +34,7 @@ comp_view
           <td>{{ value['remark'] }}</td>
           <td>{{ value['created_on'] }}</td>
           <td>{{ value['updated_on'] }}</td>
-          <td><a href={{ url_for('views.compview') }}> open</a></td>
+          <td><a href = "{{ url_for('views.detailcomview' ,id=value['ids']) }}">Open</a> </td> 
         </tr>
         {% endfor %}
       </tbody>

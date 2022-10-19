@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for
-from .models import User,Member,Comp,Notification,Admin
+import flask
+from .models import User,Member,Comp,Notification,Login
 from werkzeug.security import generate_password_hash, check_password_hash
 from . import db
 from flask_login import login_user, login_required, logout_user, current_user
@@ -19,52 +20,46 @@ def signin():
     if request.method == 'POST':
         email = request.form.get('email')
         password = request.form.get('pwd')
-        admn=Admin.query.filter_by(email=email).first()
-        #admn=Admin.query.all()
-        print(admn)
-           
-        user = User.query.filter_by(email=email).first()
-        member_log=Member.query.filter_by(email=email).first()
-        if admn:
-            if check_password_hash(admn.password,password):
-                login_user(admn,remember=True)
-                print("################",current_user)
-                return render_template("admin.html", user=current_user)
+        log=Login.query.filter_by(email=email).first()
+        print(log)
+        if log:
+            if check_password_hash(log.password,password):
+                if log.utype=='A':
+                    login_user(log,remember=True)
+                    print("################",current_user)
+                    return render_template("admin.html", user=current_user)
+                elif log.utype=='m':
+                    login_user(log,remember=True)
+                    member_obj=Member.query.filter_by(email=log.email).first() 
+                    print(member_obj.id)
+                    #complaints=Comp.query.filter_by(=log.email)
+                    complaints=Comp.query.filter_by(member_id=member_obj.id).all()
+                    print("__"*100)
+                    print(complaints)
+                    return render_template("member_home.html", user=current_user)        
+                else:
+                    login_user(log,remember=True) 
+
+                    member_obj=User.query.filter_by(email=log.email).first() 
+                    print(member_obj.id)
+                    #complaints=Comp.query.filter_by(=log.email)
+                    notifications=Notification.query.filter_by(member_id=member_obj.id).all()
+                    notification_dict={}
+                    for notifi in notifications:
+                        notification_dict[notifi.name]=notifi.desc   
+                       
+                    return render_template("user_home.html",user=current_user,data=notification_dict)
             else:
-                flash('Incorrect password, try again.', category='error')
-        print(member_log)
-        if member_log:
-            if check_password_hash(member_log.password,password):
-                flash('logged in sucessfully',category='success')
-                login_user(member_log,remember=True)
-                complaints=Comp.query.filter_by(member_id=member_log.id)
-                print("__"*100)
-                print(current_user.name)
-                return render_template("member_home.html", user=current_user)
-                #return redirect(url_for('views.member_home'))             
-            else:
-                flash('Incorrect password, try again.', category='error')
+                flash('incorrect username or password')
         else:
-            flash('',category='error')   
-        if user:
-            if check_password_hash(user.password, password):
-                flash('Logged in successfully!', category='success')
-                login_user(user, remember=True)
-                notification_dict={}
-                notifications=Notification.query.filter(Notification.member_id==User.member_id).all()
-                for notifi in notifications:
-                    notification_dict[notifi.name]=notifi.desc               
-                return render_template("user_home.html",user=current_user,data=notification_dict)
-            else:
-                flash('Incorrect password, try again.', category='error')
-        else:
-            flash(' ', category='error')
-    return render_template("login.html", user=current_user)
+            flash('incorrect username or password')
+    else:
+        return render_template("login.html",user=current_user)
+    return render_template("login.html",user=current_user)
 
 
 
 @auth.route('/sign-up_member', methods=['GET', 'POST'])
-@login_required
 def mem_signup():
     if request.method == 'POST':
         email = request.form.get('Email')
@@ -86,6 +81,11 @@ def mem_signup():
                 password1, method='sha256'))
             db.session.add(new_user)
             db.session.commit()
+
+            log_data=Login(email=email,password=generate_password_hash(password1, method='sha256'),utype='m')
+            db.session.add(log_data)
+            db.session.commit()
+
             flash('Member Account created!', category='success')
             return render_template("admin.html", user=current_user)
     return render_template("member_register.html", user=current_user)
@@ -121,6 +121,10 @@ def signup():
                 password1, method='sha256'))
             db.session.add(new_user)
             db.session.commit()
+            log_data=Login(email=email,password=generate_password_hash(password1, method='sha256'),utype='u')
+            db.session.add(log_data)
+            db.session.commit()
+            
             login_user(new_user, remember=True)
             flash('Account created!', category='success')
             logout_user()

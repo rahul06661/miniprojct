@@ -16,10 +16,11 @@ class User(db.Model,UserMixin):
     Houseno=db.Column(db.Integer)   
     password=db.Column(db.String(100))
 
-class Admin(db.Model,UserMixin):
+class Login(db.Model,UserMixin):
     id=db.Column(db.Integer,primary_key=True)
     email=db.Column(db.String(20))
     password=db.Column(db.String(1000))
+    utype=db.Column(db.String(3))
     
         
 

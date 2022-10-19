@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Detail Comp view
+{% endblock %}
+
+{% block content %}
+
+
+<h2>Complaint Form </h2>
+    <form action="{{ url_for('views.complaint_reg') }}" method="post">
+
+      <div class="form-group">
+        <label for="Complaint_name">Complaint_name:</label>
+        <input type="text" class="form-control" id="c_name" placeholder="Complaint_name" name="c_name" value={{ data['name'] }}>
+      </div>
+
+      <div class="form-group">
+        <label for="Complaint_desc">Complaint_desc:</label>
+        <input type="text" class="form-control" id="Complaint_desc" placeholder="" name="Complaint_desc" value={{ data['desc'] }}>
+      </div>
+
+      <div class="form-group">
+        <label for="Complaint_desc">Remark:</label>
+        <input type="text" class="form-control" id="Complaint_desc" placeholder="" name="Complaint_desc" >
+      </div>
+
+      <div class="form-group">
+        <label for="Complaint_desc">Status:</label>
+        <input type="text" class="form-control" id="Complaint_desc" placeholder="" name="Complaint_desc" >
+      </div>
+
+
+      <button type="submit" class="button-cls">regster</button>
+    </form>
+
+
+
+{% endblock %}

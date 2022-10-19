@@ -4,7 +4,7 @@ from os import path
 from flask_login import LoginManager
 
 db = SQLAlchemy()
-DB_NAME = "eward_database.db"
+DB_NAME = "Zward_database.db"
 
 
 def create_app():
@@ -14,7 +14,7 @@ def create_app():
     db.init_app(app)
     from .views import views
     from .auth import auth
-    from .models import User,Member,Admin
+    from .models import Login
     app.register_blueprint(views, url_prefix='/')
     app.register_blueprint(auth, url_prefix='/')
     create_database(app)
@@ -23,17 +23,9 @@ def create_app():
     login_manager.init_app(app)
 
     @login_manager.user_loader
-    def load_user(email):
-        print("_oo"*10)
-        print(email)
-        if Admin.query.get(int(email)) is not None:
-            return Admin.query.get(int(email))
-        if User.query.get(int(email)) is not None:
-            return User.query.get(int(email))
-        if Member.query.get(int(email)) is not None:
-            return Member.query.get(int(email))
-        return User.query.get(int(email))
-        
+    def load_user(id):
+        print(Login.query.get(int(id)))
+        return Login.query.get(int(id))
 
     return app
 
