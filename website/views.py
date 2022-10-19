@@ -8,19 +8,10 @@ import datetime
 views = Blueprint('views', __name__)
 
 
-
-
-
 @views.route('',methods=['GET','POST'])
 def home():
     return render_template("home.html",user=current_user)
     
-"""
-@views.route('/member_home',methods=['GET','POST'])
-@login_required
-def comp_views():   
-    return render_template("member_home.html",user=current_user)
-"""
 @views.route('/user_home',methods=['GET','POST'])
 @login_required
 def user_home():
@@ -75,24 +66,25 @@ def compview():
 def detailcomview(id): 
     complaints=Comp.query.filter_by(id=id).first()
     complaints_dicts={}
-    
     complaints_dicts={
-            'ids':complaints.id,
-            'name':complaints.name,
-            'desc':complaints.desc,
-            'status':complaints.status,
-            'remark':complaints.remark,
-            'created_on':complaints.created_on,
-            'updated_on':complaints.update_on
+                'ids':complaints.id,
+                'name':complaints.name,
+                'desc':complaints.desc,
+                'status':complaints.status,
+                'remark':complaints.remark,
+                'created_on':complaints.created_on,
+                'updated_on':complaints.update_on
             }
-    
-    if request.method=='POST':        
-        complaints.status='inactive'
-        complaints.remark='status checked and passesd'
+    if request.method=='GET':
+        return render_template("detail_compview.html",user=current_user,data=complaints_dicts)
+    if request.method=='POST':       
+        complaints.remark=request.form.get('Remark')
+        complaints.status= request.form.get('Status')
         complaints.updated_on=datetime.datetime.today()
         db.session.commit()
+        return render_template("comp_view.html",user=current_user,data=complaints_dicts)
 
-    return render_template("detail_compview.html",user=current_user,data=complaints_dicts)
+    
 
 @views.route('/notification',methods=['GET','POST'])
 @login_required

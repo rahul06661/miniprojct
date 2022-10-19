@@ -5,24 +5,28 @@ postnotification
 {% endblock %}
 
 {% block content %}
-<div>
+<div class="container">
 <form action= "{{url_for('views.notification')}}" method="post">
 
-<div>
-    <label for="Name"></label> Name <input type="text" name="name" id="name">
-</div>
+
+<div class="form-group">
+    <label for="Notification_Name">Notification_name:</label>
+    <input type="text" class="form-control" id="name" placeholder="name" name="name" >
+  </div>
+
+  <div class="form-group">
+    <label for="Description">Notification_name:</label>
+    <textarea type="text" class="form-control" id="name" placeholder="name" name="desc" ></textarea>
+  </div>
+
 
 <div>
-    <label for="Description"> </label> Description <textarea type="text" name="desc" id="desc1"></textarea>
-</div>
-
-<div>
-    <input type="submit" class="button-cls" value="post">
+    <input type="submit" class="button-cls" value="Post">
 </div>
 
 </div>
 </form>
-
+</div>
 
 {% endblock %}
    

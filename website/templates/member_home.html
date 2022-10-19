@@ -5,6 +5,13 @@ memberpage
 {% endblock %}
 
 {% block nav %}
+
+
+
+{% if user.email=='m' %}
+<li class="nav-item"><a class="nav-link active" aria-current="page" href="{{ url_for('auth.member_home') }}">Home</a></li> &nbsp; &nbsp;
+{% endif %}
+
 <li class="nav-item"><a class="nav-link" href="{{ url_for('views.compview') }}">view complaints</a></li>&nbsp; &nbsp;
 <li class="nav-item"><a class="nav-link" href="{{ url_for('views.notification') }}">post notification</a></li>&nbsp; &nbsp;
 

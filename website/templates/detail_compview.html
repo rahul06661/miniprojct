@@ -8,7 +8,8 @@ Detail Comp view
 
 
 <h2>Complaint Form </h2>
-    <form action="{{ url_for('views.complaint_reg') }}" method="post">
+<div class="container">
+    <form action="{{ url_for('views.detailcomview',id=data['ids']) }}" method="post">
 
       <div class="form-group">
         <label for="Complaint_name">Complaint_name:</label>
@@ -22,18 +23,18 @@ Detail Comp view
 
       <div class="form-group">
         <label for="Complaint_desc">Remark:</label>
-        <input type="text" class="form-control" id="Complaint_desc" placeholder="" name="Complaint_desc" >
+        <input type="text" class="form-control" id="Complaint_desc" placeholder="" name="Remark" >
       </div>
 
       <div class="form-group">
         <label for="Complaint_desc">Status:</label>
-        <input type="text" class="form-control" id="Complaint_desc" placeholder="" name="Complaint_desc" >
+        <input type="text" class="form-control" id="Complaint_desc" placeholder="" name="Status" >
       </div>
 
 
-      <button type="submit" class="button-cls">regster</button>
+      <button type="submit" class="button-cls">update</button>
     </form>
-
+  </div>
 
 
 {% endblock %}

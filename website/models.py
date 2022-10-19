@@ -22,8 +22,6 @@ class Login(db.Model,UserMixin):
     password=db.Column(db.String(1000))
     utype=db.Column(db.String(3))
     
-        
-
 
 class Member(db.Model,UserMixin):
     id=db.Column(db.Integer,primary_key=True)

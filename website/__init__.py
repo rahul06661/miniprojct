@@ -14,7 +14,7 @@ def create_app():
     db.init_app(app)
     from .views import views
     from .auth import auth
-    from .models import Login
+    from .models import Login,User,Member
     app.register_blueprint(views, url_prefix='/')
     app.register_blueprint(auth, url_prefix='/')
     create_database(app)

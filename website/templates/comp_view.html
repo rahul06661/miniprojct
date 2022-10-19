@@ -4,19 +4,20 @@
 comp_view
 {% endblock %}
 
+{% block nav %}
+
+{% if user.email=='m' %}
+<li class="nav-item"><a class="nav-link active" aria-current="page" href="{{ url_for('auth.member_home') }}">Home</a></li> &nbsp; &nbsp;
+{% endif %}
+
+{%endblock%}
+
 {% block content %}
 
 
-<!-- 
-   {% for key, value in data.items() %}
-      <h1>{{key}}</h1>
-      <h2>{{value}}</h2>
-   {% endfor %}
- -->
    <table class="table">
       <thead>
-        <tr>
-          
+        <tr>       
           <th scope="col">Name</th>
           <th scope="col">Description</th>
           <th scope="col">Status</th>      
