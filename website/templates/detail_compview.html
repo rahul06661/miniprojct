@@ -1,15 +1,10 @@
 {% extends 'base.html' %}
-
 {% block title %}
 Detail Comp view
 {% endblock %}
-
 {% block content %}
-
-
 <h2>Complaint Form </h2>
-<div class="container">
-    <form action="{{ url_for('views.detailcomview',id=data['ids']) }}" method="post">
+    <form action="{{ url_for('views.complaint_reg') }}" method="post">
 
       <div class="form-group">
         <label for="Complaint_name">Complaint_name:</label>
@@ -18,23 +13,30 @@ Detail Comp view
 
       <div class="form-group">
         <label for="Complaint_desc">Complaint_desc:</label>
-        <input type="text" class="form-control" id="Complaint_desc" placeholder="" name="Complaint_desc" value={{ data['desc'] }}>
+       
+        <textarea class="form-control" id="exampleFormControlTextarea1" name="Complaint_desc"   rows="3"> {{ data['desc'] }} </textarea>
+      </div>
+
+      <div class="form-group">
+        <div class="divsmple">
+        <img src="{{url_for ('static' ,filename={{ data['path'] }} ) }}" class="img-fluid" alt="" />
+      </div>
       </div>
 
       <div class="form-group">
         <label for="Complaint_desc">Remark:</label>
-        <input type="text" class="form-control" id="Complaint_desc" placeholder="" name="Remark" >
+        <input type="text" class="form-control" id="Complaint_desc" placeholder="" name="Complaint_desc" >
       </div>
 
       <div class="form-group">
         <label for="Complaint_desc">Status:</label>
-        <input type="text" class="form-control" id="Complaint_desc" placeholder="" name="Status" >
+        <input type="text" class="form-control" id="Complaint_desc" placeholder="" name="Complaint_desc" >
       </div>
 
 
-      <button type="submit" class="button-cls">update</button>
+      <button type="submit" class="button-cls">regster</button>
     </form>
-  </div>
+
 
 
 {% endblock %}

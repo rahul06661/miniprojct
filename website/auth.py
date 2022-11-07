@@ -14,6 +14,10 @@ def signout():
     logout_user()
     return redirect(url_for('auth.signin'))
 
+@auth.route('/ad')
+def adm():
+    return render_template("admin.html", user=current_user)
+
 
 @auth.route('/login', methods=['GET', 'POST'])
 def signin():
@@ -27,7 +31,9 @@ def signin():
                 if log.utype=='A':
                     login_user(log,remember=True)
                     print("################",current_user)
-                    return render_template("admin.html", user=current_user)
+                    #return render_template("admin.html", user=current_user)
+                    return redirect(url_for('auth.adm', user=current_user))
+                    #return redirect('ad',user=current_user)
                 elif log.utype=='m':
                     login_user(log,remember=True)
                     member_obj=Member.query.filter_by(email=log.email).first() 
@@ -36,10 +42,9 @@ def signin():
                     complaints=Comp.query.filter_by(member_id=member_obj.id).all()
                     print("__"*100)
                     print(complaints)
-                    return render_template("member_home.html", user=current_user)        
+                    return redirect(url_for('views.member_home',user=current_user))                           
                 else:
                     login_user(log,remember=True) 
-
                     member_obj=User.query.filter_by(email=log.email).first() 
                     print(member_obj.id)
                     #complaints=Comp.query.filter_by(=log.email)
@@ -56,7 +61,6 @@ def signin():
     else:
         return render_template("login.html",user=current_user)
     return render_template("login.html",user=current_user)
-
 
 
 @auth.route('/sign-up_member', methods=['GET', 'POST'])
@@ -99,6 +103,9 @@ def signup():
         Name = request.form.get('Name')
         Age = request.form.get('Age')
         gender = request.form.get('gender')
+        vote_id = request.form.get('vote_id') 
+        job = request.form.get('job')
+        tp = request.form.get('tp')
         Phone = request.form.get('Phone')
         blood_group=request.form.get('Group')
         ward=request.form.get('Ward')
@@ -116,7 +123,9 @@ def signup():
             flash('Password must be at least 7 characters.', category='error')
         else:
             member = Member.query.filter_by(ward=ward).first()
-            new_user = User(member_id=member.id,email=email,name=Name,age=Age, gender=gender,phone=Phone,blood_group=blood_group,\
+            new_user = User(member_id=member.id,email=email,name=Name,age=Age, gender=gender,phone=Phone,\
+                vote_id=vote_id,job=job,tax_payer=tp,approval=False,\
+                blood_group=blood_group,\
             ward=ward,Houseno=House_Number,password=generate_password_hash(
                 password1, method='sha256'))
             db.session.add(new_user)

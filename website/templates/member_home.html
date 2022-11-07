@@ -5,13 +5,6 @@ memberpage
 {% endblock %}
 
 {% block nav %}
-
-
-
-{% if user.email=='m' %}
-<li class="nav-item"><a class="nav-link active" aria-current="page" href="{{ url_for('auth.member_home') }}">Home</a></li> &nbsp; &nbsp;
-{% endif %}
-
 <li class="nav-item"><a class="nav-link" href="{{ url_for('views.compview') }}">view complaints</a></li>&nbsp; &nbsp;
 <li class="nav-item"><a class="nav-link" href="{{ url_for('views.notification') }}">post notification</a></li>&nbsp; &nbsp;
 
@@ -19,6 +12,38 @@ memberpage
 
 
 {% block content %}
+
+
+<table class="table">
+    <thead>
+      <tr>
+        
+        <th scope="col">Name</th>
+        <th scope="col">VoterID</th>
+        <th scope="col">Phone</th>      
+        <th scope="col">Approval</th>
+        
+      </tr>
+    </thead>
+    <tbody>
+       {% for key , value in data.items() %}       
+       <tr >         
+        <td>{{ value['name'] }}</td>
+        <td>{{ value['vote_id'] }}</td>
+        <td>{{ value['phone'] }}</td>
+        <td>
+            <select>        
+                <option value="Approved">approved</option>
+                <option value="Rejected">Rejected</option>
+           </select>
+        </td>
+      
+     
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
 
 
 
